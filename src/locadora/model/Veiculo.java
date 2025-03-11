@@ -1,14 +1,17 @@
 package locadora.model;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Veiculo {
 
-    protected int id; // Identificador único do veículo
+    protected int id; 
     protected String placa;
     protected String modelo;
     protected int ano;
     protected String status;
     protected double valorDiaria; // Valor da diária do veículo
     protected Cliente cliente; // Cliente associado ao veículo
+    private List<String> historicoPagamentos;
 
     // Construtor completo
     public Veiculo(int id, String placa, String modelo, int ano, String status, Cliente cliente, double valorDiaria) {
@@ -19,6 +22,7 @@ public abstract class Veiculo {
         this.status = status != null ? status : "Disponível"; // Garantir que o status não seja nulo
         this.cliente = cliente; // Associando o cliente
         this.valorDiaria = valorDiaria; // Inicializando o valor da diária
+        this.historicoPagamentos = new ArrayList<>();
     }
 
     // Novo construtor sem ID (para cadastro de veículos)
@@ -26,9 +30,16 @@ public abstract class Veiculo {
         this.placa = placa;
         this.modelo = modelo;
         this.ano = ano;
-        this.status = "Disponível"; // Define status padrão
-        this.valorDiaria = valorDiaria; // Define o valor da diária
+        this.status = "Disponível"; 
+        this.valorDiaria = valorDiaria; 
         this.cliente = cliente; // Associando o cliente
+        this.historicoPagamentos = new ArrayList<>();
+    }
+    public void adicionarHistoricoPagamento(String relatorio) {
+        this.historicoPagamentos.add(relatorio);
+    }
+    public List<String> getHistoricoPagamentos() {
+        return historicoPagamentos;
     }
 
     // Métodos getters e setters

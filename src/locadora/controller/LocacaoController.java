@@ -33,7 +33,8 @@ public class LocacaoController {
         double valorTotal = veiculo.calcularCustoLocacao(diasPrevistos);
 
         // Cria a nova locação
-        Locacao novaLocacao = new Locacao(veiculo.getId(), cliente.getId(), cliente, veiculo, dataRetirada, diasPrevistos, valorTotal);
+        Locacao novaLocacao = new Locacao(veiculo.getId(), cliente, veiculo, dataRetirada, diasPrevistos, valorTotal, new ArrayList<>());
+
 
         // Registra a locação
         locacoes.add(novaLocacao);

@@ -2,10 +2,9 @@ package locadora.model;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Random;
+import java.util.List;
 
 public class Locacao {
-    private static final Random random = new Random(); // Tornar o random constante
     private int idLocacao;
     private int idVeiculo;
     private int idCliente;
@@ -15,12 +14,11 @@ public class Locacao {
     private LocalDate dataDevolucaoPrevista;
     private LocalDate dataDevolucaoReal;
     private double valorTotal;
+    private List<Pagamento> pagamentos;
 
     // Construtor
-    public Locacao(int idVeiculo, int idCliente, Cliente cliente, Veiculo veiculo, LocalDate dataRetirada, int diasPrevistos, double valorTotal) {
-        this.idLocacao = 10000000 + random.nextInt(90000000); // Geração de ID aleatório
+    public Locacao(int idVeiculo, Cliente cliente, Veiculo veiculo, LocalDate dataRetirada, int diasPrevistos, double valorTotal, List<Pagamento> pagamentos) {
         this.idVeiculo = idVeiculo;
-        this.idCliente = idCliente;
         this.cliente = cliente;
         this.veiculo = veiculo;
         this.dataRetirada = dataRetirada;
@@ -28,9 +26,8 @@ public class Locacao {
         this.dataDevolucaoReal = null;
         this.valorTotal = valorTotal;
         veiculo.setStatus("Locado"); // Alteração de status do veículo
+        this.pagamentos = pagamentos;
     }
-
-    // Getters e Setters
     public int getIdLocacao() {
         return this.idLocacao;
     }
@@ -79,6 +76,30 @@ public class Locacao {
         return valorTotal;
     }
 
+    public List<Pagamento> getPagamentos() {
+        return pagamentos;
+    }
+
+    public void setPagamentos(List<Pagamento> pagamentos) {
+        this.pagamentos = pagamentos;
+    }
+
+    // Método para registrar o pagamento no momento da devolução
+    public void registrarPagamento(double valorPago, String metodoPagamento) {
+        // Cria um novo pagamento com os dados fornecidos
+        Pagamento pagamento = new Pagamento(this, valorPago, LocalDate.now(), metodoPagamento);
+        
+        // Adiciona o pagamento à lista de pagamentos da locação
+        this.pagamentos.add(pagamento);
+        
+        // Verifica se o valor pago é suficiente para cobrir o valor total da locação
+        if (valorPago >= valorTotal) {
+            System.out.println("Pagamento realizado com sucesso. Locação paga!");
+        } else {
+            System.out.println("Pagamento realizado. Ainda falta pagar: R$ " + (valorTotal - valorPago));
+        }
+    }
+
     // Método para devolver o veículo e aplicar multa por atraso
     public void devolverVeiculo(LocalDate dataDevolucaoReal, double multaPorDia) throws exception.DevolucaoAtrasadaException {
         // Verifica se a devolução já foi registrada
@@ -95,10 +116,8 @@ public class Locacao {
             throw new exception.DevolucaoAtrasadaException("A devolução foi realizada com " + diasAtraso + " dias de atraso. Multa aplicada.");
         }
 
-        veiculo.setStatus("Disponível"); // Atualiza o status do veículo
-    }
+        veiculo.setStatus("Disponível"); }
 
-    // Representação em String da Locação
     @Override
     public String toString() {
         return "Locação - ID Locação: " + getIdLocacao() +

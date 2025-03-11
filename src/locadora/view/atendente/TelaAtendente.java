@@ -100,10 +100,18 @@ public class TelaAtendente extends JFrame {
         String dataLocacao = campoDataLocacao.getText();
         String dataDevolucao = campoDataDevolucao.getText();
 
-        JOptionPane.showMessageDialog(this, "Locação registrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        // Exibir informações da locação
+        JOptionPane.showMessageDialog(this, 
+                                      "Locação registrada com sucesso!\nCliente: " + clienteSelecionado.getNome() + 
+                                      "\nVeículo: " + veiculoSelecionado.getModelo() + 
+                                      "\nData de Locação: " + dataLocacao + 
+                                      "\nData de Devolução: " + dataDevolucao,
+                                      "Sucesso", 
+                                      JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void main(String[] args) {
         new TelaAtendente();
     }
 }
+

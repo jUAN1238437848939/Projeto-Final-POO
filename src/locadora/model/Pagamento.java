@@ -1,10 +1,8 @@
 package locadora.model;
 
 import java.time.LocalDate;
-import java.util.Random;
 
 public class Pagamento {
-    private static Random random = new Random();
     private int idLocacao;
     private int idPagamento;
     private double valorPago;
@@ -14,9 +12,8 @@ public class Pagamento {
 
     // Construtor
     public Pagamento(Locacao locacao, double valorPago, LocalDate dataPagamento, String metodoPagamento) {
-        this.locacao = locacao; // Associe a locação ao pagamento
+        this.locacao = locacao; 
         this.idLocacao = locacao.getIdLocacao();
-        this.idPagamento = 100000 + random.nextInt(900000);
         this.valorPago = valorPago;
         this.dataPagamento = dataPagamento;
         this.metodoPagamento = metodoPagamento;
@@ -42,6 +39,9 @@ public class Pagamento {
     public Locacao getLocacao() {  // Adicionando o método getLocacao()
         return locacao;
     }
+    public int getIdLocacao() {
+        return locacao.getIdLocacao();  
+    }
 
     // Representação em String da classe Pagamento
     @Override
@@ -51,7 +51,4 @@ public class Pagamento {
                ", Método: " + metodoPagamento;
     }
 
-    public int getIdLocacao() {
-        return idLocacao;
-    }
 }

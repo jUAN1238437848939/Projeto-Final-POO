@@ -1,145 +1,79 @@
 package locadora.view;
 
-import locadora.dao.ClienteDAO;
-import locadora.dao.LocacaoDAO;
-import locadora.dao.PagamentoDAO;
-import locadora.dao.VeiculoDAO;
-import locadora.model.Cliente;
-import locadora.model.Locacao;
-import locadora.model.Pagamento;
-import locadora.model.Veiculo;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class TelaRelatorios extends JFrame {
 
-    private JComboBox<String> tipoRelatorioComboBox;
-    private JButton gerarRelatorioButton;
-    private JTextField idField;
-
     public TelaRelatorios() {
-        setTitle("Tela de Relatórios");
-        setSize(400, 200);
-        setLocationRelativeTo(null);
+        // Configuração da janela de relatórios
+        setTitle("Selecione o Relatório");
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new FlowLayout());
+        setLocationRelativeTo(null); // Centraliza a janela na tela
 
-        // Componente para escolher o tipo de relatório
-        tipoRelatorioComboBox = new JComboBox<>(new String[]{"Relatório de Cliente", "Relatório de Locação", "Relatório de Pagamento", "Relatório de Veículo"});
-        tipoRelatorioComboBox.setPreferredSize(new Dimension(300, 30));
-        add(tipoRelatorioComboBox);
+        // Layout da tela de relatórios
+        setLayout(new BorderLayout());
 
-        // Campo para digitar o ID do objeto (Cliente, Locação, Pagamento ou Veículo)
-        idField = new JTextField(20);
-        idField.setPreferredSize(new Dimension(300, 30));
-        add(idField);
+        // Título da tela
+        JLabel label = new JLabel("Escolha o Relatório para Gerar", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        add(label, BorderLayout.NORTH); // Coloca o título na parte superior da tela
 
-        // Botão para gerar o relatório
-        gerarRelatorioButton = new JButton("Gerar Relatório");
-        add(gerarRelatorioButton);
+        // Painel de botões para os relatórios
+        JPanel painelBotoes = new JPanel();
+        painelBotoes.setLayout(new GridLayout(4, 1, 10, 10)); // Organiza os botões em colunas
+        painelBotoes.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Adiciona espaçamento ao redor
 
-        // Ação do botão para gerar o relatório
-        gerarRelatorioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gerarRelatorio();
-            }
-        });
+        // Botão para gerar o relatório de clientes e locações
+        JButton btnRelatorioClientesLocacoes = new JButton("Clientes e Locações");
+        btnRelatorioClientesLocacoes.addActionListener(e -> gerarRelatorioClientesLocacoes());
+        painelBotoes.add(btnRelatorioClientesLocacoes);
+
+        // Botão para gerar outro relatório, por exemplo, de pagamentos
+        JButton btnRelatorioPagamentos = new JButton("Relatório de Pagamentos");
+        btnRelatorioPagamentos.addActionListener(e -> gerarRelatorioPagamentos());
+        painelBotoes.add(btnRelatorioPagamentos);
+
+        // Botão para gerar outro relatório
+        JButton btnRelatorioVeiculos = new JButton("Relatório de Veículos");
+        btnRelatorioVeiculos.addActionListener(e -> gerarRelatorioVeiculos());
+        painelBotoes.add(btnRelatorioVeiculos);
+
+        // Botão de sair
+        JButton btnSair = new JButton("Sair");
+        btnSair.addActionListener(e -> sair());
+        painelBotoes.add(btnSair);
+
+        // Adiciona o painel de botões na tela
+        add(painelBotoes, BorderLayout.CENTER);
+
+        // Exibe a tela
+        setVisible(true);
     }
 
-    private void gerarRelatorio() {
-        String tipoRelatorio = (String) tipoRelatorioComboBox.getSelectedItem();
-        String idTexto = idField.getText().trim();
-
-        if (idTexto.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, informe um ID válido.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            // Obter o ID informado
-            int id = Integer.parseInt(idTexto);
-
-            // Gerar o relatório de acordo com a seleção
-            switch (tipoRelatorio) {
-                case "Relatório de Cliente":
-                    gerarRelatorioCliente(id);
-                    break;
-                case "Relatório de Locação":
-                    gerarRelatorioLocacao(id);
-                    break;
-                case "Relatório de Pagamento":
-                    gerarRelatorioPagamento(id);
-                    break;
-                case "Relatório de Veículo":
-                    gerarRelatorioVeiculo(id);
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(this, "Tipo de relatório inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    break;
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "ID inválido. Por favor, insira um número.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+    // Métodos para gerar os relatórios
+    private void gerarRelatorioClientesLocacoes() {
+        // Chama a geração do relatório de clientes e locações
+        new locadora.view.relatorios.RelatorioClientesLocacoes().gerarRelatorio();
+        dispose(); // Fecha a tela de relatórios
     }
 
-    private void gerarRelatorioCliente(int id) {
-        ClienteDAO clienteDAO = new ClienteDAO();
-        Cliente cliente = clienteDAO.carregar("clientes.json").stream().filter(c -> c.getId() == id).findFirst().orElse(null);
-
-        if (cliente != null) {
-            clienteDAO.gerarRelatorioPagamento(cliente);
-            JOptionPane.showMessageDialog(this, "Relatório de cliente gerado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Cliente não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+    private void gerarRelatorioPagamentos() {
+        // Aqui você deve adicionar a lógica para gerar o relatório de pagamentos
+        System.out.println("Gerando relatório de pagamentos...");
+        dispose(); // Fecha a tela de relatórios
     }
 
-    private void gerarRelatorioLocacao(int id) {
-        LocacaoDAO locacaoDAO = new LocacaoDAO();
-        Locacao locacao = locacaoDAO.carregar("locacoes.json").stream().filter(l -> l.getIdLocacao() == id).findFirst().orElse(null);
-
-        if (locacao != null) {
-            locacaoDAO.gerarRelatorioPagamento(locacao);
-            JOptionPane.showMessageDialog(this, "Relatório de locação gerado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Locação não encontrada!", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+    private void gerarRelatorioVeiculos() {
+        // Aqui você deve adicionar a lógica para gerar o relatório de veículos
+        System.out.println("Gerando relatório de veículos...");
+        dispose(); // Fecha a tela de relatórios
     }
 
-    private void gerarRelatorioPagamento(int id) {
-        PagamentoDAO pagamentoDAO = new PagamentoDAO();
-        Pagamento pagamento = pagamentoDAO.carregar("pagamentos.json").stream().filter(p -> p.getIdPagamento() == id).findFirst().orElse(null);
-
-        if (pagamento != null) {
-            pagamentoDAO.gerarRelatorioPagamento(pagamento);
-            JOptionPane.showMessageDialog(this, "Relatório de pagamento gerado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Pagamento não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void gerarRelatorioVeiculo(int id) {
-        VeiculoDAO veiculoDAO = new VeiculoDAO();
-        Veiculo veiculo = veiculoDAO.carregar("veiculos.json").stream().filter(v -> v.getId() == id).findFirst().orElse(null);
-
-        if (veiculo != null) {
-            veiculoDAO.gerarRelatorioPagamento(veiculo);
-            JOptionPane.showMessageDialog(this, "Relatório de veículo gerado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Veículo não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new TelaRelatorios().setVisible(true);
-            }
-        });
+    // Método para fechar a tela de relatórios
+    private void sair() {
+        dispose(); // Fecha a tela de relatórios
     }
 }
+

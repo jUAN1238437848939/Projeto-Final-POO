@@ -34,6 +34,6 @@ public class ClienteController {
 
     // Método para listar todos os clientes
     public List<Cliente> listarClientes() {
-        return new ArrayList<>(clientes); // Retorna uma cópia para evitar modificações externas
+        return new ArrayList<>(clientes); 
     }
 }

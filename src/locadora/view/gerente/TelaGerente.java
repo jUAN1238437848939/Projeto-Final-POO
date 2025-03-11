@@ -44,6 +44,7 @@ public class TelaGerente extends JFrame {
         btnRelatorios.addActionListener(e -> gerarRelatorios()); // Ação para gerar relatórios
         painelBotoes.add(btnRelatorios);
 
+
         // Botão de sair (volta para a tela de login)
         JButton btnSair = new JButton("Sair");
         btnSair.addActionListener(e -> sair()); // Ação de sair da tela
@@ -68,7 +69,7 @@ public class TelaGerente extends JFrame {
 
     // Método para abrir a tela de relatórios
     private void gerarRelatorios() {
-        new TelaRelatorios(); // Abre a tela de relatórios
+        new TelaRelatorios();
     }
 
     // Método para simular a ação de sair (volta para a tela de login)
@@ -81,4 +82,5 @@ public class TelaGerente extends JFrame {
         new TelaGerente(); // Executa a tela de gerente
     }
 }
+
 
